@@ -12,10 +12,29 @@ public class characterCombat : MonoBehaviour
     private Vector3 en1_Platform_Position;
     private Transform player_Platform;
     private Vector3 player_Platform_Position;
+    private Vector3 targetEnemy;
+
     private bool hasArrived;
     private bool hasStarted;
-    //private bool hasAttacked;
+
+    public float healthPoints = 100;
+    public float attackPoints = 150;
+    public float defensePoints = 30;
+    private float energyPoints = 30;
+
+    private float enemy_healthPoints;
+    private float enemy_attackPoints;
+    private float enemy_defensePoints;
+
+    private float attackCost = 10;
+    private float defenseCost = 5;
+    private float energyAddition = 15;
+
+    public bool hasAttacked = false;
     private bool hasReturned;
+    public bool isDefending;
+    
+    private enemyController enemy_Controller;
 
 
     private float moveDir;
@@ -23,32 +42,65 @@ public class characterCombat : MonoBehaviour
 
 
     void moveToEnemy () { 
-            transform.position = Vector3.MoveTowards(transform.position, en1_Platform_Position, speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, targetEnemy, speed * Time.deltaTime);
             character_Base.walkingAnimation(true, true);
     }
+
+    void attack () {
+        if (this.hasAttacked == false){
+            character_Base.walkingAnimation(false, true);
+            character_Base.attackingAnimation(true, true);
+            if (isDefending == true){
+                if (enemy_defensePoints < attackPoints){
+                    enemy_healthPoints = enemy_healthPoints - (attackPoints - enemy_defensePoints);
+                }
+                else {
+                    enemy_healthPoints = enemy_healthPoints;
+                }
+            }
+            else {
+                //enemy_healthPoints = enemy_healthPoints - attackPoints;
+                enemy_Controller.receiveDamage(attackPoints);
+            }
+        }
+
+        bool hasAttacked = true;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         character_Base = GetComponent<characterBase>();
+
+        GameObject enemy1 = GameObject.Find("enemy");
+        enemy_Controller = enemy1.GetComponent<enemyController>();
+        enemy_healthPoints = enemy_Controller.healthPoints;
+        enemy_attackPoints = enemy_Controller.attackPoints;
+        enemy_defensePoints = enemy_Controller.defensePoints;
+
+
         GameObject en1Platform = GameObject.Find("en1Platform");
         en1_Platform = en1Platform.GetComponent<Transform>();
         en1_Platform_Position = en1_Platform.position;
+
         GameObject playerPlatform = GameObject.Find("playerPlatform");
         player_Platform = playerPlatform.GetComponent<Transform>();
         player_Platform_Position = player_Platform.position;
-        //hasArrived = false;
 
+        Vector3 targetEnemy = en1_Platform_Position;
     }
 
     // Update is called once per frame
     void Update()
     {
+        //if
+
         if(Input.GetKey(KeyCode.W)){
             hasArrived = false;
             hasStarted = true;
         }
 
-            if (transform.position == en1_Platform_Position){
+            if (transform.position == targetEnemy){
                 hasArrived = true;
             }
             else if (hasStarted == true){
@@ -56,9 +108,7 @@ public class characterCombat : MonoBehaviour
             }
 
             if (hasArrived == true){
-                character_Base.walkingAnimation(false, true);
-                character_Base.attackingAnimation(true, true);
-
+                attack();
             }
         
          //while (hasArrived == false){
@@ -82,12 +132,6 @@ public class characterCombat : MonoBehaviour
 } 
     //void moveTo (Vector3 position) {
     //    player_Platform_Position = position;
-    //}
-
-
-    //public void attack () {
-    //    character_Base.attackingAnimation(true);
-    //    hasAttacked = true;
     //}
 
     //public void moveTo (Vector3 position){
