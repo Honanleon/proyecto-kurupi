@@ -7,8 +7,8 @@ public class enemyController : MonoBehaviour
     public bool selectedEnemy = false;
     public Transform thisTransform;
 
-    public float healthPoints;
-    public float attackPoints = 25;
+    private float healthPoints;
+    private float attackPoints = 25;
     public float defensePoints = 25;
     private float energyPoints = 10;
 
@@ -40,8 +40,6 @@ public class enemyController : MonoBehaviour
         //Transform thisTransform =  GetComponent<Transform>();
         GameObject enemy1 = GameObject.Find("player");
         enemy_Controller = enemy1.GetComponent<characterCombat>();
-        enemy_healthPoints = enemy_Controller.healthPoints;
-        enemy_attackPoints = enemy_Controller.attackPoints;
         enemy_defensePoints = enemy_Controller.defensePoints;
 
         enemy_hasAttacked = enemy_Controller.hasAttacked;

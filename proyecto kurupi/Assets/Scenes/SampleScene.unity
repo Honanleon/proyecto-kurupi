@@ -394,8 +394,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bed683cb1f815402d9187c7289da0a59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthPoints: 100
-  attackPoints: 150
   defensePoints: 0
   hasAttacked: 0
   isDefending: 0
@@ -1474,8 +1472,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectedEnemy: 0
   thisTransform: {fileID: 0}
-  healthPoints: 80
-  attackPoints: 0
   defensePoints: 0
   isDefending: 0
 --- !u!114 &1882027080
