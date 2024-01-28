@@ -8,6 +8,7 @@ using UnityEngine;
 public class characterCombat : MonoBehaviour
 {
     private characterBase character_Base;
+    private BattleHandler battle_Handler;
     private Transform en1_Platform;
     private Vector3 en1_Platform_Position;
     private Transform player_Platform;
@@ -31,7 +32,7 @@ public class characterCombat : MonoBehaviour
     private float energyAddition = 15;
 
     public bool hasAttacked;
-    private bool hasReturned;
+    public bool hasReturned;
     private bool hasFinishedAnimation;
     public bool isDefending;
     
@@ -40,10 +41,6 @@ public class characterCombat : MonoBehaviour
 
     private float moveDir;
     public float speed = 1f;
-
-    public void receiveDamage (float damageReceived){
-        healthPoints = healthPoints - damageReceived;
-    }
 
     void moveToEnemy () { 
             transform.position = Vector3.MoveTowards(transform.position, targetEnemy, speed * Time.deltaTime);
@@ -86,20 +83,48 @@ public class characterCombat : MonoBehaviour
         character_Base.attackingAnimation(false, true);
         character_Base.walkingAnimation(true, false);
         if (transform.position == player_Platform_Position){
-                hasReturned = true;
+            hasReturned = true;
         }
     }
     void FinishedAnimation (){
         hasFinishedAnimation = true;
     }
 
+    public void receiveDamage (float damageReceived){
+        healthPoints = healthPoints - damageReceived;
+        damageReceived = 0;
+    }
+
+    public void attackCircuit (){
+         if (hasStarted == true && hasArrived == false){
+                moveToEnemy();
+            }
+            if (hasArrived == true && hasAttacked == false){
+                attack();
+            }
+            if (hasAttacked == true && hasReturned == false && hasFinishedAnimation == true){
+                returnToPlatform();
+            }
+            if (hasReturned == true){
+                hasReturned = false;
+                hasArrived = false;
+                hasAttacked = false;
+                hasFinishedAnimation = false;
+                battle_Handler.endAttack();
+                character_Base.walkingAnimation(false, true);
+                character_Base.idleAnimation(true, true);
+            }
+    }
     // Start is called before the first frame update
     void Start()
     {
         character_Base = GetComponent<characterBase>();
 
+        hasArrived = false;
+        hasStarted = true;
         hasAttacked = false;
-
+        hasReturned = false;
+       
         GameObject enemy1 = GameObject.Find("enemy");
         enemy_Controller = enemy1.GetComponent<enemyController>();
         enemy_defensePoints = enemy_Controller.defensePoints;
@@ -114,78 +139,15 @@ public class characterCombat : MonoBehaviour
         player_Platform_Position = player_Platform.position;
 
         Vector3 targetEnemy = en1_Platform_Position;
+
+        GameObject battleHandler = GameObject.Find("BattleHandler");
+        battle_Handler = battleHandler.GetComponent<BattleHandler>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        //if
-
-        if(Input.GetKey(KeyCode.W)){
-            hasArrived = false;
-            hasStarted = true;
-            hasAttacked = false;
-            hasReturned = false;
-        }
-
-            if (hasStarted == true && hasArrived == false){
-                moveToEnemy();
-            }
-
-            if (hasArrived == true && hasAttacked == false){
-                attack();
-            }
-           // if (transform.position == player_Platform_Position){
-           //     hasReturned = true;
-            //}
-            if (hasAttacked == true && hasReturned == false && hasFinishedAnimation == true){
-                returnToPlatform();
-            }
-            if (hasReturned == true){
-                hasReturned = false;
-                hasArrived = false;
-                hasAttacked = false;
-                hasFinishedAnimation = false;
-                hasStarted = false;
-                character_Base.walkingAnimation(false, true);
-                character_Base.idleAnimation(true, true);
-            }
-
-         //while (hasArrived == false){
-            //transform.position = Vector3.MoveTowards(transform.position, en1_Platform_Position, speed * Time.deltaTime);
-            //character_Base.walkingAnimation(true);
 
     }
-        //character_Base.walkingAnimation(true);
-        //moveToEnemy();
-        //if(Input.GetKey(KeyCode.W)){
-            //moveToEnemy(false);
-        //}
-            //hasAttacked = false;
-            //while (hasAttacked == false){
-            //    attack();
-            //}
-            //hasReturned = false;
-            //while (hasReturned == false){
-               //moveBack();
         
 } 
-    //void moveTo (Vector3 position) {
-    //    player_Platform_Position = position;
-    //}
-
-    //public void moveTo (Vector3 position){
-    //    en1_Platform_Position = position;
-
-    //}
-
-   // void moveBack (){
-
-    //    if (transform.position == player_Platform_Position){
-    //        hasReturned = true;
-    //    }
-    //    else {
-    //        transform.position = Vector3.MoveTowards(transform.position, player_Platform_Position, speed * Time.deltaTime);
-    //        character_Base.walkingAnimation(false);
-   //     }
-    //}

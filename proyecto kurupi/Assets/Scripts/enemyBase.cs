@@ -21,7 +21,7 @@ public class enemyBase : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_SpriteRenderer = GetComponent<SpriteRenderer>();
+         m_SpriteRenderer = GetComponent<SpriteRenderer>();
 
     }
 
@@ -43,6 +43,9 @@ public class enemyBase : MonoBehaviour
         if (walkingRight == false) {
             m_SpriteRenderer.flipX = true;
         }
+        if (walkingRight == true) {
+            m_SpriteRenderer.flipX = false;
+        }
     }
     public void deathAnimation (bool isDying, bool dyingRight) {
         if (isDying == true){
@@ -50,6 +53,9 @@ public class enemyBase : MonoBehaviour
         }        
         if (dyingRight == false) {
             m_SpriteRenderer.flipX = true;
+        }
+        if (dyingRight == true) {
+            m_SpriteRenderer.flipX = false;
         }
     }
 
@@ -65,6 +71,9 @@ public class enemyBase : MonoBehaviour
         if (runningRight == false) {
             m_SpriteRenderer.flipX = true;
         }
+        if (runningRight == true) {
+            m_SpriteRenderer.flipX = false;
+        }
     }
     public void idleAnimation (bool isInactive, bool idleRight){
         if (isInactive == true){
@@ -75,6 +84,9 @@ public class enemyBase : MonoBehaviour
         }
         if (idleRight == false) {
             m_SpriteRenderer.flipX = true;
+        }
+        if (idleRight == true) {
+            m_SpriteRenderer.flipX = false;
         }
     }
     public void attackingAnimation (bool isPunching, bool attackingRight) {
@@ -90,6 +102,8 @@ public class enemyBase : MonoBehaviour
         if (attackingRight == false) {
             m_SpriteRenderer.flipX = true;
         }
-
+        if (attackingRight == true) {
+            m_SpriteRenderer.flipX = false;
+        }
     }
 }
