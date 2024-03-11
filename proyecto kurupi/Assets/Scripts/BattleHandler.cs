@@ -6,12 +6,12 @@ using UnityEngine.UI;
 
 public class BattleHandler : MonoBehaviour
 {
-    private State state;
+    public State state;
     private characterCombat character_Combat;
     private bool startAttack;
     //private attackButton attack_Button;
     private Canvas canvas;
-    private enum State {
+    public enum State {
         WaitingForPlayer,
         Busy,
     }
